@@ -1,0 +1,563 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXContainerItemProxy section */
+		CEB638582E2B6B79006DAD1E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CEB638422E2B6B78006DAD1E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CEB638492E2B6B78006DAD1E;
+			remoteInfo = "Westminster Reminder";
+		};
+		CEB638622E2B6B79006DAD1E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CEB638422E2B6B78006DAD1E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CEB638492E2B6B78006DAD1E;
+			remoteInfo = "Westminster Reminder";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		CEB6384A2E2B6B78006DAD1E /* Westminster Reminder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Westminster Reminder.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		CEB638572E2B6B79006DAD1E /* Westminster ReminderTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Westminster ReminderTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		CEB638612E2B6B79006DAD1E /* Westminster ReminderUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Westminster ReminderUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		CEB6384C2E2B6B78006DAD1E /* Westminster Reminder */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "Westminster Reminder";
+			sourceTree = "<group>";
+		};
+		CEB6385A2E2B6B79006DAD1E /* Westminster ReminderTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "Westminster ReminderTests";
+			sourceTree = "<group>";
+		};
+		CEB638642E2B6B79006DAD1E /* Westminster ReminderUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "Westminster ReminderUITests";
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		CEB638472E2B6B78006DAD1E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CEB638542E2B6B79006DAD1E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CEB6385E2E2B6B79006DAD1E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		CEB638412E2B6B78006DAD1E = {
+			isa = PBXGroup;
+			children = (
+				CEB6384C2E2B6B78006DAD1E /* Westminster Reminder */,
+				CEB6385A2E2B6B79006DAD1E /* Westminster ReminderTests */,
+				CEB638642E2B6B79006DAD1E /* Westminster ReminderUITests */,
+				CEB6384B2E2B6B78006DAD1E /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		CEB6384B2E2B6B78006DAD1E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				CEB6384A2E2B6B78006DAD1E /* Westminster Reminder.app */,
+				CEB638572E2B6B79006DAD1E /* Westminster ReminderTests.xctest */,
+				CEB638612E2B6B79006DAD1E /* Westminster ReminderUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		CEB638492E2B6B78006DAD1E /* Westminster Reminder */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CEB6386B2E2B6B79006DAD1E /* Build configuration list for PBXNativeTarget "Westminster Reminder" */;
+			buildPhases = (
+				CEB638462E2B6B78006DAD1E /* Sources */,
+				CEB638472E2B6B78006DAD1E /* Frameworks */,
+				CEB638482E2B6B78006DAD1E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				CEB6384C2E2B6B78006DAD1E /* Westminster Reminder */,
+			);
+			name = "Westminster Reminder";
+			packageProductDependencies = (
+			);
+			productName = "Westminster Reminder";
+			productReference = CEB6384A2E2B6B78006DAD1E /* Westminster Reminder.app */;
+			productType = "com.apple.product-type.application";
+		};
+		CEB638562E2B6B79006DAD1E /* Westminster ReminderTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CEB6386E2E2B6B79006DAD1E /* Build configuration list for PBXNativeTarget "Westminster ReminderTests" */;
+			buildPhases = (
+				CEB638532E2B6B79006DAD1E /* Sources */,
+				CEB638542E2B6B79006DAD1E /* Frameworks */,
+				CEB638552E2B6B79006DAD1E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				CEB638592E2B6B79006DAD1E /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				CEB6385A2E2B6B79006DAD1E /* Westminster ReminderTests */,
+			);
+			name = "Westminster ReminderTests";
+			packageProductDependencies = (
+			);
+			productName = "Westminster ReminderTests";
+			productReference = CEB638572E2B6B79006DAD1E /* Westminster ReminderTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		CEB638602E2B6B79006DAD1E /* Westminster ReminderUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CEB638712E2B6B79006DAD1E /* Build configuration list for PBXNativeTarget "Westminster ReminderUITests" */;
+			buildPhases = (
+				CEB6385D2E2B6B79006DAD1E /* Sources */,
+				CEB6385E2E2B6B79006DAD1E /* Frameworks */,
+				CEB6385F2E2B6B79006DAD1E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				CEB638632E2B6B79006DAD1E /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				CEB638642E2B6B79006DAD1E /* Westminster ReminderUITests */,
+			);
+			name = "Westminster ReminderUITests";
+			packageProductDependencies = (
+			);
+			productName = "Westminster ReminderUITests";
+			productReference = CEB638612E2B6B79006DAD1E /* Westminster ReminderUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		CEB638422E2B6B78006DAD1E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1640;
+				LastUpgradeCheck = 1640;
+				TargetAttributes = {
+					CEB638492E2B6B78006DAD1E = {
+						CreatedOnToolsVersion = 16.4;
+					};
+					CEB638562E2B6B79006DAD1E = {
+						CreatedOnToolsVersion = 16.4;
+						TestTargetID = CEB638492E2B6B78006DAD1E;
+					};
+					CEB638602E2B6B79006DAD1E = {
+						CreatedOnToolsVersion = 16.4;
+						TestTargetID = CEB638492E2B6B78006DAD1E;
+					};
+				};
+			};
+			buildConfigurationList = CEB638452E2B6B78006DAD1E /* Build configuration list for PBXProject "Westminster Reminder" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = CEB638412E2B6B78006DAD1E;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = CEB6384B2E2B6B78006DAD1E /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				CEB638492E2B6B78006DAD1E /* Westminster Reminder */,
+				CEB638562E2B6B79006DAD1E /* Westminster ReminderTests */,
+				CEB638602E2B6B79006DAD1E /* Westminster ReminderUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		CEB638482E2B6B78006DAD1E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CEB638552E2B6B79006DAD1E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CEB6385F2E2B6B79006DAD1E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		CEB638462E2B6B78006DAD1E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CEB638532E2B6B79006DAD1E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CEB6385D2E2B6B79006DAD1E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		CEB638592E2B6B79006DAD1E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CEB638492E2B6B78006DAD1E /* Westminster Reminder */;
+			targetProxy = CEB638582E2B6B79006DAD1E /* PBXContainerItemProxy */;
+		};
+		CEB638632E2B6B79006DAD1E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CEB638492E2B6B78006DAD1E /* Westminster Reminder */;
+			targetProxy = CEB638622E2B6B79006DAD1E /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		CEB638692E2B6B79006DAD1E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 8VWLVY2R95;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		CEB6386A2E2B6B79006DAD1E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 8VWLVY2R95;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		CEB6386C2E2B6B79006DAD1E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 8VWLVY2R95;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.rwgk.Westminster-Reminder";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		CEB6386D2E2B6B79006DAD1E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 8VWLVY2R95;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.rwgk.Westminster-Reminder";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		CEB6386F2E2B6B79006DAD1E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 8VWLVY2R95;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.rwgk.Westminster-ReminderTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Westminster Reminder.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Westminster Reminder";
+			};
+			name = Debug;
+		};
+		CEB638702E2B6B79006DAD1E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 8VWLVY2R95;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.rwgk.Westminster-ReminderTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Westminster Reminder.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Westminster Reminder";
+			};
+			name = Release;
+		};
+		CEB638722E2B6B79006DAD1E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 8VWLVY2R95;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.rwgk.Westminster-ReminderUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "Westminster Reminder";
+			};
+			name = Debug;
+		};
+		CEB638732E2B6B79006DAD1E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 8VWLVY2R95;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.rwgk.Westminster-ReminderUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "Westminster Reminder";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		CEB638452E2B6B78006DAD1E /* Build configuration list for PBXProject "Westminster Reminder" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CEB638692E2B6B79006DAD1E /* Debug */,
+				CEB6386A2E2B6B79006DAD1E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CEB6386B2E2B6B79006DAD1E /* Build configuration list for PBXNativeTarget "Westminster Reminder" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CEB6386C2E2B6B79006DAD1E /* Debug */,
+				CEB6386D2E2B6B79006DAD1E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CEB6386E2E2B6B79006DAD1E /* Build configuration list for PBXNativeTarget "Westminster ReminderTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CEB6386F2E2B6B79006DAD1E /* Debug */,
+				CEB638702E2B6B79006DAD1E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CEB638712E2B6B79006DAD1E /* Build configuration list for PBXNativeTarget "Westminster ReminderUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CEB638722E2B6B79006DAD1E /* Debug */,
+				CEB638732E2B6B79006DAD1E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = CEB638422E2B6B78006DAD1E /* Project object */;
+}
