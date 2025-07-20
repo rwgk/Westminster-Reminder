@@ -98,7 +98,7 @@ class ChimeManager: ObservableObject {
         var components = calendar.dateComponents([.year, .month, .day], from: now)
         components.hour = nextHour
         components.minute = nextMinute
-        components.second = 60 - secondsBefore // X seconds before the minute
+        components.second = -secondsBefore // X seconds before the minute start
         
         guard let nextChimeDate = calendar.date(from: components) else {
             debugInfo = "Error calculating next chime time"
@@ -115,13 +115,19 @@ class ChimeManager: ObservableObject {
         
         let timeInterval = finalChimeDate.timeIntervalSinceNow
         
-        // Update UI with "HH:MM -X seconds" format
+        // Update UI with "X seconds before HH:MM" format
         let formatter = DateFormatter()
         formatter.dateFormat = "HH:mm"
         
-        // Get the actual quarter hour time (not the -X seconds time)
-        let actualQuarterHour = calendar.date(byAdding: .second, value: secondsBefore, to: finalChimeDate) ?? finalChimeDate
-        nextChimeTime = "\(formatter.string(from: actualQuarterHour)) -\(secondsBefore) seconds"
+        // The actual quarter hour time
+        let quarterHourComponents = calendar.dateComponents([.year, .month, .day], from: now)
+        var quarterComponents = quarterHourComponents
+        quarterComponents.hour = nextHour
+        quarterComponents.minute = nextMinute
+        quarterComponents.second = 0
+        
+        let actualQuarterHour = calendar.date(from: quarterComponents) ?? finalChimeDate
+        nextChimeTime = "\(secondsBefore) seconds before \(formatter.string(from: actualQuarterHour))"
         updateCountdown()
         debugInfo = "Next Westminster chime scheduled"
         
@@ -239,6 +245,12 @@ struct ContentView: View {
                                         .font(.title2)
                                         .foregroundColor(.blue)
                                         .fontWeight(.medium)
+                                        .underline()
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: 4)
+                                                .stroke(Color.blue.opacity(0.3), lineWidth: 1)
+                                                .padding(-4)
+                                        )
                                 }
                             }
                             
