@@ -14,6 +14,7 @@ class ChimeManager: ObservableObject {
     @Published var nextChimeTime = ""
     @Published var timeToNextChime = ""
     @Published var secondsBefore = 20 // Default 20 seconds
+    @Published var nextQuarterHourTime = "" // Add this for the UI
     
     private var timer: Timer?
     private var countdownTimer: Timer?
@@ -114,19 +115,20 @@ class ChimeManager: ObservableObject {
         
         let timeInterval = finalChimeDate.timeIntervalSinceNow
         
-        // Update UI with "X seconds before HH:MM" format
+        // Update UI with the next quarter hour time
         let formatter = DateFormatter()
         formatter.dateFormat = "HH:mm"
         
-        // The actual quarter hour time
-        let quarterHourComponents = calendar.dateComponents([.year, .month, .day], from: now)
-        var quarterComponents = quarterHourComponents
+        // Calculate the actual quarter hour time that we're chiming before
+        var quarterComponents = calendar.dateComponents([.year, .month, .day], from: finalChimeDate)
         quarterComponents.hour = nextHour
         quarterComponents.minute = nextMinute
         quarterComponents.second = 0
         
         let actualQuarterHour = calendar.date(from: quarterComponents) ?? finalChimeDate
-        nextChimeTime = "\(secondsBefore) seconds before \(formatter.string(from: actualQuarterHour))"
+        let quarterHourTime = formatter.string(from: actualQuarterHour)
+        nextQuarterHourTime = quarterHourTime // Store for UI
+        nextChimeTime = "unused" // We'll build this in the UI now
         updateCountdown()
         debugInfo = "Next Westminster chime scheduled"
         
@@ -254,7 +256,7 @@ struct ContentView: View {
                                 Text("seconds before")
                                     .font(.title2)
                                     .foregroundColor(.gray)
-                                Text(String(chimeManager.nextChimeTime.split(separator: " ").last ?? ""))
+                                Text(chimeManager.nextQuarterHourTime)
                                     .font(.title2)
                                     .foregroundColor(.blue)
                                     .fontWeight(.medium)
@@ -324,6 +326,28 @@ struct SecondsPickerView: View {
     @Binding var isPresented: Bool
     let onSave: () -> Void
     
+    // Smart granularity for seconds
+    private var secondsOptions: [Int] {
+        var options: [Int] = []
+        
+        // 0-10: every second
+        for i in 0...10 {
+            options.append(i)
+        }
+        
+        // 15-60: every 5 seconds
+        for i in stride(from: 15, through: 60, by: 5) {
+            options.append(i)
+        }
+        
+        // 70-120: every 10 seconds
+        for i in stride(from: 70, through: 120, by: 10) {
+            options.append(i)
+        }
+        
+        return options
+    }
+    
     var body: some View {
         NavigationView {
             VStack {
@@ -332,7 +356,7 @@ struct SecondsPickerView: View {
                     .padding()
                 
                 Picker("Seconds", selection: $secondsBefore) {
-                    ForEach(0...120, id: \.self) { seconds in
+                    ForEach(secondsOptions, id: \.self) { seconds in
                         Text("\(seconds) second\(seconds == 1 ? "" : "s")")
                             .tag(seconds)
                     }
