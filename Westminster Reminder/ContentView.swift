@@ -4,27 +4,92 @@ import AVFoundation
 
 class AppDelegate: NSObject, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        UNUserNotificationCenter.current().delegate = self
         return true
     }
 }
 
-extension AppDelegate: UNUserNotificationCenterDelegate {
-    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-        // Play sound even when app is in foreground - need both sound and list for iOS 15+
-        if #available(iOS 14.0, *) {
-            completionHandler([.sound, .list])
-        } else {
-            completionHandler([.sound])
+class ChimeManager: ObservableObject {
+    @Published var isActive = false
+    @Published var debugInfo = ""
+    @Published var nextChimeTime = ""
+    
+    private var timer: Timer?
+    private var audioPlayer: AVAudioPlayer?
+    
+    init() {
+        setupAudioSession()
+    }
+    
+    private func setupAudioSession() {
+        do {
+            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [.mixWithOthers])
+            try AVAudioSession.sharedInstance().setActive(true)
+        } catch {
+            debugInfo = "Audio session setup failed: \(error.localizedDescription)"
         }
+    }
+    
+    func startChiming() {
+        stopChiming() // Stop any existing timer
+        
+        // Schedule the next chime
+        scheduleNextChime()
+        isActive = true
+        debugInfo = "Chiming started!"
+    }
+    
+    func stopChiming() {
+        timer?.invalidate()
+        timer = nil
+        isActive = false
+        nextChimeTime = ""
+        debugInfo = "Chiming stopped"
+    }
+    
+    private func scheduleNextChime() {
+        let now = Date()
+        let calendar = Calendar.current
+        let currentSecond = calendar.component(.second, from: now)
+        
+        // Calculate seconds until next 10-second mark
+        let secondsUntilNext10 = (10 - (currentSecond % 10)) % 10
+        let actualSecondsToWait = secondsUntilNext10 == 0 ? 10 : secondsUntilNext10
+        
+        let nextChimeDate = now.addingTimeInterval(Double(actualSecondsToWait))
+        
+        // Update UI
+        let formatter = DateFormatter()
+        formatter.timeStyle = .medium
+        nextChimeTime = formatter.string(from: nextChimeDate)
+        debugInfo = "Next chime in \(actualSecondsToWait) seconds at \(nextChimeTime)"
+        
+        // Schedule the timer
+        timer = Timer.scheduledTimer(withTimeInterval: Double(actualSecondsToWait), repeats: false) { [weak self] _ in
+            DispatchQueue.main.async {
+                self?.playChime()
+                self?.scheduleNextChime() // Schedule the next one
+            }
+        }
+    }
+    
+    private func playChime() {
+        // Play the system bell sound directly
+        AudioServicesPlaySystemSound(1013) // Bell sound
+        
+        // Update debug info
+        let formatter = DateFormatter()
+        formatter.timeStyle = .medium
+        debugInfo = "🔔 Chimed at \(formatter.string(from: Date()))"
+    }
+    
+    func playTestSound() {
+        AudioServicesPlaySystemSound(1013) // Same Bell sound
     }
 }
 
 struct ContentView: View {
-    @State private var isReminderActive = false
+    @StateObject private var chimeManager = ChimeManager()
     @State private var notificationPermissionGranted = false
-    @State private var scheduledCount = 0
-    @State private var debugInfo = ""
     
     var body: some View {
         NavigationView {
@@ -37,93 +102,59 @@ struct ContentView: View {
                     .font(.largeTitle)
                     .fontWeight(.bold)
                 
-                Text("Get reminded to play Westminster chimes every 15 minutes!")
+                Text("Get reminded to play Westminster chimes every 10 seconds!")
                     .font(.body)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal)
                 
                 VStack(spacing: 15) {
-                    if notificationPermissionGranted {
-                        Button(action: {
-                            if isReminderActive {
-                                stopReminders()
-                            } else {
-                                startReminders()
-                            }
-                        }) {
-                            Text(isReminderActive ? "Stop Reminders" : "Start Reminders")
-                                .font(.headline)
-                                .foregroundColor(.white)
-                                .frame(maxWidth: .infinity)
-                                .padding()
-                                .background(isReminderActive ? Color.red : Color.green)
-                                .cornerRadius(10)
+                    Button(action: {
+                        if chimeManager.isActive {
+                            chimeManager.stopChiming()
+                        } else {
+                            chimeManager.startChiming()
                         }
-                        
-                        if isReminderActive {
-                            Text("🔔 Active - You'll get notified 20 seconds before each quarter hour")
-                                .font(.caption)
-                                .foregroundColor(.green)
-                                .multilineTextAlignment(.center)
-                        }
-                    } else {
-                        Button("Enable Notifications") {
-                            requestNotificationPermission()
-                        }
-                        .font(.headline)
-                        .foregroundColor(.white)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.blue)
-                        .cornerRadius(10)
-                        
-                        Text("Notifications are required for reminders to work")
+                    }) {
+                        Text(chimeManager.isActive ? "Stop Chiming" : "Start Chiming")
+                            .font(.headline)
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(chimeManager.isActive ? Color.red : Color.green)
+                            .cornerRadius(10)
+                    }
+                    
+                    if chimeManager.isActive {
+                        Text("🔔 Active - Next chime: \(chimeManager.nextChimeTime)")
                             .font(.caption)
-                            .foregroundColor(.gray)
+                            .foregroundColor(.green)
+                            .multilineTextAlignment(.center)
                     }
                     
                     Button("Test Sound") {
-                        playTestSound()
+                        chimeManager.playTestSound()
                     }
                     .font(.subheadline)
                     .foregroundColor(.blue)
-                    
-                    Button("Check Scheduled Notifications") {
-                        checkScheduledNotifications()
-                    }
-                    .font(.subheadline)
-                    .foregroundColor(.orange)
-                    
-                    Button("Check Notification Settings") {
-                        checkNotificationSettings()
-                    }
-                    .font(.subheadline)
-                    .foregroundColor(.purple)
                 }
                 .padding(.horizontal)
                 
                 Spacer()
                 
                 VStack(spacing: 5) {
-                    Text("Reminders will play:")
+                    Text("Timer-based chiming:")
                         .font(.headline)
-                    Text("11:59:40, 12:14:40, 12:29:40, 12:44:40")
+                    Text("Plays Bell sound every 10 seconds")
                         .font(.caption)
                         .foregroundColor(.gray)
-                    Text("(20 seconds before each quarter hour)")
+                    Text("(No notifications needed!)")
                         .font(.caption)
                         .foregroundColor(.gray)
                     
-                    if scheduledCount > 0 {
-                        Text("📅 \(scheduledCount) notifications scheduled")
+                    if !chimeManager.debugInfo.isEmpty {
+                        Text(chimeManager.debugInfo)
                             .font(.caption)
                             .foregroundColor(.blue)
-                    }
-                    
-                    if !debugInfo.isEmpty {
-                        Text(debugInfo)
-                            .font(.caption)
-                            .foregroundColor(.red)
                             .multilineTextAlignment(.center)
                     }
                 }
@@ -131,114 +162,5 @@ struct ContentView: View {
             .padding()
             .navigationBarHidden(true)
         }
-        .onAppear {
-            checkNotificationPermission()
-        }
-    }
-    
-    func requestNotificationPermission() {
-        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { granted, error in
-            DispatchQueue.main.async {
-                self.notificationPermissionGranted = granted
-            }
-        }
-    }
-    
-    func checkNotificationPermission() {
-        UNUserNotificationCenter.current().getNotificationSettings { settings in
-            DispatchQueue.main.async {
-                self.notificationPermissionGranted = settings.authorizationStatus == .authorized
-            }
-        }
-    }
-    
-    func startReminders() {
-        // Clear any existing notifications
-        UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
-        
-        let calendar = Calendar.current
-        let now = Date()
-        let formatter = DateFormatter()
-        formatter.dateFormat = "MM/dd HH:mm:ss"
-        
-        // Show current time in the app
-        debugInfo = "Current: \(formatter.string(from: now))"
-        
-        // Find the next 10-second mark
-        let currentSecond = calendar.component(.second, from: now)
-        let secondsUntilNext10 = (10 - (currentSecond % 10)) % 10
-        let secondsUntilNext10OrNow = secondsUntilNext10 == 0 ? 10 : secondsUntilNext10
-        
-        // Schedule 12 notifications, every 10 seconds
-        var scheduledCount = 0
-        for i in 0..<12 {
-            let timeInterval = Double(secondsUntilNext10OrNow + (i * 10))
-            
-            let content = UNMutableNotificationContent()
-            content.title = "Test Chime #\(i + 1)"
-            content.body = "Westminster test notification 🎵"
-            content.sound = UNNotificationSound(named: UNNotificationSoundName("sms-received5.caf"))
-            
-            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: timeInterval, repeats: false)
-            let request = UNNotificationRequest(identifier: "test-chime-\(i)", content: content, trigger: trigger)
-            
-            UNUserNotificationCenter.current().add(request) { error in
-                if error == nil {
-                    scheduledCount += 1
-                }
-            }
-        }
-        
-        // Calculate first notification time for display
-        let firstNotificationDate = now.addingTimeInterval(Double(secondsUntilNext10OrNow))
-        
-        // Update debug info
-        debugInfo = "Current: \(formatter.string(from: now))\nFirst test: \(formatter.string(from: firstNotificationDate))\nIn \(secondsUntilNext10OrNow) seconds\n12 notifications every 10s"
-        
-        isReminderActive = true
-        self.scheduledCount = 12
-    }
-    
-    func stopReminders() {
-        UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
-        isReminderActive = false
-        scheduledCount = 0
-    }
-    
-    func checkScheduledNotifications() {
-        UNUserNotificationCenter.current().getPendingNotificationRequests { requests in
-            DispatchQueue.main.async {
-                self.scheduledCount = requests.count
-                if requests.count > 0 {
-                    let nextRequest = requests.first!
-                    if let trigger = nextRequest.trigger as? UNCalendarNotificationTrigger,
-                       let nextFireDate = trigger.nextTriggerDate() {
-                        let formatter = DateFormatter()
-                        formatter.dateStyle = .short
-                        formatter.timeStyle = .medium
-                        self.debugInfo = "Next: \(formatter.string(from: nextFireDate))"
-                    }
-                } else {
-                    self.debugInfo = "No notifications scheduled"
-                }
-            }
-        }
-    }
-    
-    func checkNotificationSettings() {
-        UNUserNotificationCenter.current().getNotificationSettings { settings in
-            DispatchQueue.main.async {
-                var settingsInfo = "Auth: \(settings.authorizationStatus.rawValue)\n"
-                settingsInfo += "Sound: \(settings.soundSetting.rawValue)\n"
-                settingsInfo += "Alert: \(settings.alertSetting.rawValue)\n"
-                settingsInfo += "Badge: \(settings.badgeSetting.rawValue)"
-                self.debugInfo = settingsInfo
-            }
-        }
-    }
-    
-    func playTestSound() {
-        // Play the same Bell sound that notifications will use
-        AudioServicesPlaySystemSound(1013) // This is the Bell sound (sms-received5.caf)
     }
 }
