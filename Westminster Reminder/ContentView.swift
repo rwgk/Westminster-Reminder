@@ -209,6 +209,20 @@ class ChimeManager: ObservableObject {
     func playTestSound() {
         AudioServicesPlaySystemSound(1013) // Same Bell sound
     }
+    
+    // Format seconds into display format (matching the picker)
+    func formatSecondsDisplay(_ seconds: Int) -> String {
+        if seconds == 0 {
+            return "0 seconds"
+        } else if seconds >= 120 && seconds % 60 == 0 {
+            // Only show as minutes if it's exactly 2+ minutes (120, 180, 240, etc.)
+            let minutes = seconds / 60
+            return "\(minutes) minute\(minutes == 1 ? "" : "s")"
+        } else {
+            // Everything else shows as seconds (including 70, 80, 90, 100, 110)
+            return "\(seconds) second\(seconds == 1 ? "" : "s")"
+        }
+    }
 }
 
 struct ContentView: View {
@@ -268,13 +282,19 @@ struct ContentView: View {
                             chimeManager.startChiming()
                         }
                     }) {
-                        Text(chimeManager.isActive ? "Stop Chiming" : "Start Chiming")
-                            .font(.headline)
-                            .foregroundColor(.white)
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(chimeManager.isActive ? Color.red : Color.green)
-                            .cornerRadius(10)
+                        HStack {
+                            Text(chimeManager.isActive ? "Pause Chiming" : "Start Chiming")
+                                .font(.headline)
+                                .foregroundColor(.white)
+                            
+                            Image(systemName: chimeManager.isActive ? "pause.fill" : "play.fill")
+                                .font(.headline)
+                                .foregroundColor(.white)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(chimeManager.isActive ? Color.red : Color.green)
+                        .cornerRadius(10)
                     }
                     
                     if chimeManager.isActive {
@@ -292,7 +312,7 @@ struct ContentView: View {
                                 Button(action: {
                                     showingSecondsPicker = true
                                 }) {
-                                    Text("\(chimeManager.secondsBefore)")
+                                    Text(chimeManager.formatSecondsDisplay(chimeManager.secondsBefore))
                                         .font(.title2)
                                         .foregroundColor(.blue)
                                         .fontWeight(.medium)
@@ -303,7 +323,7 @@ struct ContentView: View {
                                                 .stroke(Color.blue.opacity(0.5), lineWidth: 1)
                                         )
                                 }
-                                Text("seconds before")
+                                Text("before")
                                     .font(.title2)
                                     .foregroundColor(.gray)
                                 Text(chimeManager.nextQuarterHourTime)
@@ -313,7 +333,7 @@ struct ContentView: View {
                             }
                             
                             HStack {
-                                Text("Seconds to")
+                                Text("Count-down to")
                                     .font(.title2)
                                     .foregroundColor(.gray)
                                 Image(systemName: "bell.fill")
@@ -349,7 +369,7 @@ struct ContentView: View {
                         .foregroundColor(.blue)
                     }
                     
-                    Text("Westminster Comfort")
+                    Text("Westminster Comfort v\(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0.0")")
                         .font(.caption)
                         .foregroundColor(.gray)
                         .opacity(0.7)
@@ -386,23 +406,32 @@ struct SecondsPickerView: View {
     @Binding var isPresented: Bool
     let onSave: () -> Void
     
-    // Smart granularity for seconds
-    private var secondsOptions: [Int] {
-        var options: [Int] = []
+    // Smart granularity with seconds and minutes
+    private var timeOptions: [(value: Int, display: String)] {
+        var options: [(value: Int, display: String)] = []
         
-        // 0-10: every second
-        for i in 0...10 {
-            options.append(i)
+        // 0 seconds (special case)
+        options.append((0, "0 seconds"))
+        
+        // 1-10: every second
+        for i in 1...10 {
+            options.append((i, "\(i) second\(i == 1 ? "" : "s")"))
         }
         
         // 15-60: every 5 seconds
         for i in stride(from: 15, through: 60, by: 5) {
-            options.append(i)
+            options.append((i, "\(i) seconds"))
         }
         
-        // 70-120: every 10 seconds
-        for i in stride(from: 70, through: 120, by: 10) {
-            options.append(i)
+        // 70-110: every 10 seconds
+        for i in stride(from: 70, through: 110, by: 10) {
+            options.append((i, "\(i) seconds"))
+        }
+        
+        // 2-10: every minute (in seconds)
+        for i in 2...10 {
+            let seconds = i * 60
+            options.append((seconds, "\(i) minute\(i == 1 ? "" : "s")"))
         }
         
         return options
@@ -416,9 +445,9 @@ struct SecondsPickerView: View {
                     .padding()
                 
                 Picker("Seconds", selection: $secondsBefore) {
-                    ForEach(secondsOptions, id: \.self) { seconds in
-                        Text("\(seconds) second\(seconds == 1 ? "" : "s")")
-                            .tag(seconds)
+                    ForEach(timeOptions, id: \.value) { option in
+                        Text(option.display)
+                            .tag(option.value)
                     }
                 }
                 .pickerStyle(WheelPickerStyle())

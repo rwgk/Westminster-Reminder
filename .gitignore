@@ -1,7 +1,8 @@
 # Xcode
 .DS_Store
 UserInterfaceState.xcuserstate
-*.xcworkspace/xcuserdata/
+**/xcuserdata/
+**/xcshareddata/
 DerivedData/
 *.hmap
 *.ipa
