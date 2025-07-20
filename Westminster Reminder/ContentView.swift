@@ -177,7 +177,7 @@ struct ContentView: View {
             let content = UNMutableNotificationContent()
             content.title = "Test Chime #\(i + 1)"
             content.body = "Westminster test notification 🎵"
-            content.sound = UNNotificationSound(named: UNNotificationSoundName("Tink.aiff"))
+            content.sound = UNNotificationSound(named: UNNotificationSoundName("sms-received5.caf"))
             
             let trigger = UNTimeIntervalNotificationTrigger(timeInterval: timeInterval, repeats: false)
             let request = UNNotificationRequest(identifier: "test-chime-\(i)", content: content, trigger: trigger)
