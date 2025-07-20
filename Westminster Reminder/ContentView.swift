@@ -74,7 +74,6 @@ class ChimeManager: ObservableObject {
         // Get current time components
         let currentHour = calendar.component(.hour, from: now)
         let currentMinute = calendar.component(.minute, from: now)
-        let currentSecond = calendar.component(.second, from: now)
         
         // Find the next quarter hour (00, 15, 30, 45)
         var nextMinute: Int
@@ -228,7 +227,7 @@ struct ContentView: View {
                     
                     if chimeManager.isActive {
                         VStack(spacing: 12) {
-                            HStack {
+                            HStack(spacing: 4) {
                                 Text("Next")
                                     .font(.title2)
                                     .foregroundColor(.gray)
@@ -241,17 +240,24 @@ struct ContentView: View {
                                 Button(action: {
                                     showingSecondsPicker = true
                                 }) {
-                                    Text(chimeManager.nextChimeTime)
+                                    Text("\(chimeManager.secondsBefore)")
                                         .font(.title2)
                                         .foregroundColor(.blue)
                                         .fontWeight(.medium)
-                                        .underline()
+                                        .padding(.horizontal, 8)
+                                        .padding(.vertical, 2)
                                         .overlay(
                                             RoundedRectangle(cornerRadius: 4)
-                                                .stroke(Color.blue.opacity(0.3), lineWidth: 1)
-                                                .padding(-4)
+                                                .stroke(Color.blue.opacity(0.5), lineWidth: 1)
                                         )
                                 }
+                                Text("seconds before")
+                                    .font(.title2)
+                                    .foregroundColor(.gray)
+                                Text(String(chimeManager.nextChimeTime.split(separator: " ").last ?? ""))
+                                    .font(.title2)
+                                    .foregroundColor(.blue)
+                                    .fontWeight(.medium)
                             }
                             
                             HStack {
