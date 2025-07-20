@@ -102,10 +102,13 @@ class ChimeManager: ObservableObject {
         
         let timeInterval = finalChimeDate.timeIntervalSinceNow
         
-        // Update UI
+        // Update UI with "HH:MM -20 seconds" format
         let formatter = DateFormatter()
-        formatter.timeStyle = .medium
-        nextChimeTime = formatter.string(from: finalChimeDate)
+        formatter.dateFormat = "HH:mm"
+        
+        // Get the actual quarter hour time (not the -20 seconds time)
+        let actualQuarterHour = calendar.date(byAdding: .second, value: 20, to: finalChimeDate) ?? finalChimeDate
+        nextChimeTime = "\(formatter.string(from: actualQuarterHour)) -20 seconds"
         updateCountdown()
         debugInfo = "Next Westminster chime scheduled"
         
@@ -204,25 +207,32 @@ struct ContentView: View {
                     }
                     
                     if chimeManager.isActive {
-                        VStack(spacing: 8) {
-                            Text("🔔 Westminster Chiming Active")
-                                .font(.caption)
-                                .foregroundColor(.green)
-                                .fontWeight(.semibold)
-                            
+                        VStack(spacing: 12) {
                             HStack {
-                                Text("Next reminder time:")
-                                    .font(.caption)
+                                Text("Next")
+                                    .font(.title2)
+                                    .foregroundColor(.gray)
+                                Image(systemName: "bell.fill")
+                                    .font(.title2)
+                                    .foregroundColor(.blue)
+                                Text(":")
+                                    .font(.title2)
                                     .foregroundColor(.gray)
                                 Text(chimeManager.nextChimeTime)
-                                    .font(.caption)
+                                    .font(.title2)
                                     .foregroundColor(.blue)
                                     .fontWeight(.medium)
                             }
                             
                             HStack {
-                                Text("Time to next reminder:")
-                                    .font(.caption)
+                                Text("Seconds to")
+                                    .font(.title2)
+                                    .foregroundColor(.gray)
+                                Image(systemName: "bell.fill")
+                                    .font(.title2)
+                                    .foregroundColor(.blue)
+                                Text(":")
+                                    .font(.title2)
                                     .foregroundColor(.gray)
                                 Text(chimeManager.timeToNextChime)
                                     .font(.title2)
@@ -244,22 +254,11 @@ struct ContentView: View {
                 
                 Spacer()
                 
-                VStack(spacing: 5) {
-                    Text("Westminster timing:")
-                        .font(.headline)
-                    Text("Chimes 20 seconds before each quarter hour")
+                if !chimeManager.debugInfo.isEmpty {
+                    Text(chimeManager.debugInfo)
                         .font(.caption)
-                        .foregroundColor(.gray)
-                    Text("(11:59:40, 12:14:40, 12:29:40, 12:44:40)")
-                        .font(.caption)
-                        .foregroundColor(.gray)
-                    
-                    if !chimeManager.debugInfo.isEmpty {
-                        Text(chimeManager.debugInfo)
-                            .font(.caption)
-                            .foregroundColor(.blue)
-                            .multilineTextAlignment(.center)
-                    }
+                        .foregroundColor(.blue)
+                        .multilineTextAlignment(.center)
                 }
             }
             .padding()
