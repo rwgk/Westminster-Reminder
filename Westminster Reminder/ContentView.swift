@@ -237,28 +237,34 @@ struct ContentView: View {
                                 Text(chimeManager.timeToNextChime)
                                     .font(.title2)
                                     .foregroundColor(.green)
-                                    .fontWeight(.bold)
+                                    .fontWeight(.medium)
                                     .monospacedDigit()
                             }
                         }
                         .multilineTextAlignment(.center)
                     }
-                    
-                    Button("Test Sound") {
-                        chimeManager.playTestSound()
-                    }
-                    .font(.subheadline)
-                    .foregroundColor(.blue)
                 }
                 .padding(.horizontal)
                 
                 Spacer()
                 
-                if !chimeManager.debugInfo.isEmpty {
-                    Text(chimeManager.debugInfo)
-                        .font(.caption)
+                VStack(spacing: 8) {
+                    Button(action: {
+                        chimeManager.playTestSound()
+                    }) {
+                        HStack {
+                            Text("Test")
+                                .font(.title3)
+                            Image(systemName: "bell.fill")
+                                .font(.title3)
+                        }
                         .foregroundColor(.blue)
-                        .multilineTextAlignment(.center)
+                    }
+                    
+                    Text("Westminster Comfort")
+                        .font(.caption)
+                        .foregroundColor(.gray)
+                        .opacity(0.7)
                 }
             }
             .padding()
