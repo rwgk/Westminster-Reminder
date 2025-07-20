@@ -11,14 +11,20 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 
 extension AppDelegate: UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-        // Play sound even when app is in foreground
-        completionHandler([.sound])
+        // Play sound even when app is in foreground - need both sound and list for iOS 15+
+        if #available(iOS 14.0, *) {
+            completionHandler([.sound, .list])
+        } else {
+            completionHandler([.sound])
+        }
     }
 }
 
 struct ContentView: View {
     @State private var isReminderActive = false
     @State private var notificationPermissionGranted = false
+    @State private var scheduledCount = 0
+    @State private var debugInfo = ""
     
     var body: some View {
         NavigationView {
@@ -81,6 +87,18 @@ struct ContentView: View {
                     }
                     .font(.subheadline)
                     .foregroundColor(.blue)
+                    
+                    Button("Check Scheduled Notifications") {
+                        checkScheduledNotifications()
+                    }
+                    .font(.subheadline)
+                    .foregroundColor(.orange)
+                    
+                    Button("Check Notification Settings") {
+                        checkNotificationSettings()
+                    }
+                    .font(.subheadline)
+                    .foregroundColor(.purple)
                 }
                 .padding(.horizontal)
                 
@@ -95,6 +113,19 @@ struct ContentView: View {
                     Text("(20 seconds before each quarter hour)")
                         .font(.caption)
                         .foregroundColor(.gray)
+                    
+                    if scheduledCount > 0 {
+                        Text("📅 \(scheduledCount) notifications scheduled")
+                            .font(.caption)
+                            .foregroundColor(.blue)
+                    }
+                    
+                    if !debugInfo.isEmpty {
+                        Text(debugInfo)
+                            .font(.caption)
+                            .foregroundColor(.red)
+                            .multilineTextAlignment(.center)
+                    }
                 }
             }
             .padding()
@@ -127,49 +158,87 @@ struct ContentView: View {
         
         let calendar = Calendar.current
         let now = Date()
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MM/dd HH:mm:ss"
         
-        // Create notifications for the next 30 days
-        for dayOffset in 0..<30 {
-            guard let targetDate = calendar.date(byAdding: .day, value: dayOffset, to: now) else { continue }
+        // Show current time in the app
+        debugInfo = "Current: \(formatter.string(from: now))"
+        
+        // Find the next 10-second mark
+        let currentSecond = calendar.component(.second, from: now)
+        let secondsUntilNext10 = (10 - (currentSecond % 10)) % 10
+        let secondsUntilNext10OrNow = secondsUntilNext10 == 0 ? 10 : secondsUntilNext10
+        
+        // Schedule 12 notifications, every 10 seconds
+        var scheduledCount = 0
+        for i in 0..<12 {
+            let timeInterval = Double(secondsUntilNext10OrNow + (i * 10))
             
-            // For each quarter hour: 00, 15, 30, 45
-            for minute in [0, 15, 30, 45] {
-                // Set time to 20 seconds before the minute
-                var components = calendar.dateComponents([.year, .month, .day], from: targetDate)
-                
-                for hour in 0..<24 {
-                    components.hour = hour
-                    components.minute = minute
-                    components.second = 40  // 20 seconds before the next minute
-                    
-                    guard let notificationDate = calendar.date(from: components) else { continue }
-                    
-                    // Only schedule if it's in the future
-                    if notificationDate > now {
-                        let content = UNMutableNotificationContent()
-                        content.title = "Westminster Chime Time!"
-                        content.body = "Time to play the chimes on your xylophone 🎵"
-                        content.sound = UNNotificationSound(named: UNNotificationSoundName("bell.aiff"))
-                        
-                        let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
-                        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
-                        
-                        UNUserNotificationCenter.current().add(request)
-                    }
+            let content = UNMutableNotificationContent()
+            content.title = "Test Chime #\(i + 1)"
+            content.body = "Westminster test notification 🎵"
+            content.sound = UNNotificationSound(named: UNNotificationSoundName("Tink.aiff"))
+            
+            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: timeInterval, repeats: false)
+            let request = UNNotificationRequest(identifier: "test-chime-\(i)", content: content, trigger: trigger)
+            
+            UNUserNotificationCenter.current().add(request) { error in
+                if error == nil {
+                    scheduledCount += 1
                 }
             }
         }
         
+        // Calculate first notification time for display
+        let firstNotificationDate = now.addingTimeInterval(Double(secondsUntilNext10OrNow))
+        
+        // Update debug info
+        debugInfo = "Current: \(formatter.string(from: now))\nFirst test: \(formatter.string(from: firstNotificationDate))\nIn \(secondsUntilNext10OrNow) seconds\n12 notifications every 10s"
+        
         isReminderActive = true
+        self.scheduledCount = 12
     }
     
     func stopReminders() {
         UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
         isReminderActive = false
+        scheduledCount = 0
+    }
+    
+    func checkScheduledNotifications() {
+        UNUserNotificationCenter.current().getPendingNotificationRequests { requests in
+            DispatchQueue.main.async {
+                self.scheduledCount = requests.count
+                if requests.count > 0 {
+                    let nextRequest = requests.first!
+                    if let trigger = nextRequest.trigger as? UNCalendarNotificationTrigger,
+                       let nextFireDate = trigger.nextTriggerDate() {
+                        let formatter = DateFormatter()
+                        formatter.dateStyle = .short
+                        formatter.timeStyle = .medium
+                        self.debugInfo = "Next: \(formatter.string(from: nextFireDate))"
+                    }
+                } else {
+                    self.debugInfo = "No notifications scheduled"
+                }
+            }
+        }
+    }
+    
+    func checkNotificationSettings() {
+        UNUserNotificationCenter.current().getNotificationSettings { settings in
+            DispatchQueue.main.async {
+                var settingsInfo = "Auth: \(settings.authorizationStatus.rawValue)\n"
+                settingsInfo += "Sound: \(settings.soundSetting.rawValue)\n"
+                settingsInfo += "Alert: \(settings.alertSetting.rawValue)\n"
+                settingsInfo += "Badge: \(settings.badgeSetting.rawValue)"
+                self.debugInfo = settingsInfo
+            }
+        }
     }
     
     func playTestSound() {
         // Play the same Bell sound that notifications will use
-        AudioServicesPlaySystemSound(1013) // This is the Bell sound
+        AudioServicesPlaySystemSound(1013) // This is the Bell sound (sms-received5.caf)
     }
 }
