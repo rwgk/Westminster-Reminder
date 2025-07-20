@@ -13,6 +13,7 @@ class ChimeManager: ObservableObject {
     @Published var debugInfo = ""
     @Published var nextChimeTime = ""
     @Published var timeToNextChime = ""
+    @Published var secondsBefore = 20 // Default 20 seconds
     
     private var timer: Timer?
     private var countdownTimer: Timer?
@@ -21,6 +22,7 @@ class ChimeManager: ObservableObject {
     
     init() {
         setupAudioSession()
+        loadSettings()
     }
     
     private func setupAudioSession() {
@@ -30,6 +32,17 @@ class ChimeManager: ObservableObject {
         } catch {
             debugInfo = "Audio session setup failed: \(error.localizedDescription)"
         }
+    }
+    
+    private func loadSettings() {
+        secondsBefore = UserDefaults.standard.integer(forKey: "secondsBefore")
+        if secondsBefore == 0 { // First time
+            secondsBefore = 20
+        }
+    }
+    
+    func saveSettings() {
+        UserDefaults.standard.set(secondsBefore, forKey: "secondsBefore")
     }
     
     func startChiming() {
@@ -81,11 +94,11 @@ class ChimeManager: ObservableObject {
             }
         }
         
-        // Create the target time: 20 seconds before the quarter hour
+        // Create the target time: X seconds before the quarter hour
         var components = calendar.dateComponents([.year, .month, .day], from: now)
         components.hour = nextHour
-        components.minute = nextMinute - 1  // One minute before
-        components.second = 40  // 40 seconds = 20 seconds before the next minute
+        components.minute = nextMinute
+        components.second = 60 - secondsBefore // X seconds before the minute
         
         guard let nextChimeDate = calendar.date(from: components) else {
             debugInfo = "Error calculating next chime time"
@@ -102,13 +115,13 @@ class ChimeManager: ObservableObject {
         
         let timeInterval = finalChimeDate.timeIntervalSinceNow
         
-        // Update UI with "HH:MM -20 seconds" format
+        // Update UI with "HH:MM -X seconds" format
         let formatter = DateFormatter()
         formatter.dateFormat = "HH:mm"
         
-        // Get the actual quarter hour time (not the -20 seconds time)
-        let actualQuarterHour = calendar.date(byAdding: .second, value: 20, to: finalChimeDate) ?? finalChimeDate
-        nextChimeTime = "\(formatter.string(from: actualQuarterHour)) -20 seconds"
+        // Get the actual quarter hour time (not the -X seconds time)
+        let actualQuarterHour = calendar.date(byAdding: .second, value: secondsBefore, to: finalChimeDate) ?? finalChimeDate
+        nextChimeTime = "\(formatter.string(from: actualQuarterHour)) -\(secondsBefore) seconds"
         updateCountdown()
         debugInfo = "Next Westminster chime scheduled"
         
@@ -172,6 +185,7 @@ class ChimeManager: ObservableObject {
 struct ContentView: View {
     @StateObject private var chimeManager = ChimeManager()
     @State private var notificationPermissionGranted = false
+    @State private var showingSecondsPicker = false
     
     var body: some View {
         NavigationView {
@@ -218,10 +232,14 @@ struct ContentView: View {
                                 Text(":")
                                     .font(.title2)
                                     .foregroundColor(.gray)
-                                Text(chimeManager.nextChimeTime)
-                                    .font(.title2)
-                                    .foregroundColor(.blue)
-                                    .fontWeight(.medium)
+                                Button(action: {
+                                    showingSecondsPicker = true
+                                }) {
+                                    Text(chimeManager.nextChimeTime)
+                                        .font(.title2)
+                                        .foregroundColor(.blue)
+                                        .fontWeight(.medium)
+                                }
                             }
                             
                             HStack {
@@ -269,6 +287,58 @@ struct ContentView: View {
             }
             .padding()
             .navigationBarHidden(true)
+        }
+        .sheet(isPresented: $showingSecondsPicker) {
+            SecondsPickerView(secondsBefore: $chimeManager.secondsBefore,
+                            isPresented: $showingSecondsPicker,
+                            onSave: {
+                                chimeManager.saveSettings()
+                                if chimeManager.isActive {
+                                    chimeManager.startChiming() // Restart with new timing
+                                }
+                            })
+        }
+    }
+}
+
+struct SecondsPickerView: View {
+    @Binding var secondsBefore: Int
+    @Binding var isPresented: Bool
+    let onSave: () -> Void
+    
+    var body: some View {
+        NavigationView {
+            VStack {
+                Text("Chime before quarter hour")
+                    .font(.headline)
+                    .padding()
+                
+                Picker("Seconds", selection: $secondsBefore) {
+                    ForEach(0...120, id: \.self) { seconds in
+                        Text("\(seconds) second\(seconds == 1 ? "" : "s")")
+                            .tag(seconds)
+                    }
+                }
+                .pickerStyle(WheelPickerStyle())
+                .padding()
+                
+                Spacer()
+            }
+            .navigationTitle("Timing")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button("Cancel") {
+                        isPresented = false
+                    }
+                }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Save") {
+                        onSave()
+                        isPresented = false
+                    }
+                }
+            }
         }
     }
 }
